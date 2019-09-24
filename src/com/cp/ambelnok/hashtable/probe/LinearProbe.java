@@ -2,7 +2,10 @@ package com.cp.ambelnok.hashtable.probe;
 
 public class LinearProbe implements Probe {
 
-    private int step;
+    private int step = 1;
+
+    public LinearProbe() {
+    }
 
     public LinearProbe(int step) {
         this.step = step;

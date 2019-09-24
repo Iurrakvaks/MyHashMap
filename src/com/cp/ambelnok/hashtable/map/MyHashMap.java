@@ -8,7 +8,7 @@ import com.cp.ambelnok.hashtable.indexer.NodeIndexer;
 public class MyHashMap implements OpenAddressMap {
 
     private int size;
-    private double loadFactor = 0.75d;
+    private double loadFactor = 0.7d;
     private int usedNodeAmount;
     private LinearProbe probe;
     private NodeIndexer nodeIndexer;
@@ -18,7 +18,6 @@ public class MyHashMap implements OpenAddressMap {
 
         private int key;
         private long value;
-        private boolean available;
 
         Node(int key, long value) {
             this.key = key;
@@ -35,14 +34,6 @@ public class MyHashMap implements OpenAddressMap {
 
         int getKey() {
             return key;
-        }
-
-        boolean isAvailable() {
-            return available;
-        }
-
-        void setAvailable(boolean value) {
-            available = value;
         }
     }
 
@@ -76,8 +67,7 @@ public class MyHashMap implements OpenAddressMap {
     }
 
     private void put(Node node) {
-        int index = findIndex(node.getKey());
-        nodes[index] = node;
+
     }
 
 
@@ -128,7 +118,8 @@ public class MyHashMap implements OpenAddressMap {
 
         for (Node node : oldNodesArray) {
             if (node != null) {
-                put(node);
+                int index = findIndex(node.getKey());
+                nodes[index] = node;
             }
         }
     }
@@ -163,9 +154,5 @@ public class MyHashMap implements OpenAddressMap {
             }
         }
         return false;
-    }
-
-    public void remove(int key) {
-        nodes[findIndex(key)].setAvailable(true);
     }
 }
