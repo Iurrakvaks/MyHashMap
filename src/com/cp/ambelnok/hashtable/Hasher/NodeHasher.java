@@ -10,7 +10,7 @@ public class NodeHasher implements Hasher {
 
     @Override
     public int getHash(int key) {
-        return Hasher.mask(key) % size;
+        return Hasher.mask(key) % (size);
     }
 
 }

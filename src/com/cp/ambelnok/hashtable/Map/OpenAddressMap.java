@@ -9,7 +9,8 @@ public interface OpenAddressMap {
 
     void clear();
 
-    void resize();
+    default void resize() {
+    }
 
     boolean isEmpty();
 

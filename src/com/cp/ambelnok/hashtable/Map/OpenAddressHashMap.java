@@ -1,7 +1,6 @@
 package com.cp.ambelnok.hashtable.Map;
 
 import com.cp.ambelnok.hashtable.Probe.LinearProbe;
-import com.cp.ambelnok.hashtable.Node.Node;
 import com.cp.ambelnok.hashtable.Hasher.NodeHasher;
 
 public class OpenAddressHashMap implements OpenAddressMap {
@@ -13,8 +12,39 @@ public class OpenAddressHashMap implements OpenAddressMap {
     private NodeHasher nodeHasher;
     private Node[] nodes;
 
+    private class Node {
 
-    public OpenAddressHashMap(int size, int step){
+        private int key;
+        private long value;
+        private boolean available;
+
+        public Node(int key, long value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public long getValue() {
+            return value;
+        }
+
+        public void setValue(long value) {
+            this.value = value;
+        }
+
+        public int getKey() {
+            return key;
+        }
+
+        public boolean isAvailable() {
+            return available;
+        }
+
+        public void setAvailable(boolean value) {
+            available = value;
+        }
+    }
+
+    public OpenAddressHashMap(int size, int step) {
         this.size = size;
         this.probe = new LinearProbe(step);
         this.nodes = new Node[this.size];
@@ -31,49 +61,47 @@ public class OpenAddressHashMap implements OpenAddressMap {
 
     @Override
     public void put(int key, long value) {
-        if (checkResize()){ resize(); }
-        int index = findIndex(key);
-        if (nodes[index] != null){
-            nodes[index].setValue(value);
+        if (checkResize()) {
+            resize();
         }
-        else{
+        int index = findIndex(key);
+        if (nodes[index] != null) {
+            nodes[index].setValue(value);
+        } else {
             nodes[index] = new Node(key, value);
             usedNodeAmount++;
         }
     }
 
-    private void put(Node node){
+    private void put(Node node) {
         int index = findIndex(node.getKey());
         nodes[index] = node;
     }
 
 
-    private int findIndex(int key){
+    private int findIndex(int key) {
         int index = nodeHasher.getHash(key);
-        while (checkCollision(index, key)){
-            if(index < this.size){
+        while (checkCollision(index, key)) {
+            if (index < this.size) {
                 index = probe.getNext(index);
-            }
-            else{
+            } else {
                 index = probe.getNext(0);
             }
         }
         return nodeHasher.getHash(index);
     }
 
-    private boolean checkCollision(int index, int key){
-        if(index >= this.size){
+    private boolean checkCollision(int index, int key) {
+        if (index >= this.size) {
             return true;
-        }
-        else if(nodes[index] != null){
-          return nodes[index].getKey() != key;
-        }
-        else{
+        } else if (nodes[index] != null) {
+            return nodes[index].getKey() != key;
+        } else {
             return false;
         }
     }
 
-    private boolean checkResize(){
+    private boolean checkResize() {
         return usedNodeAmount >= loadFactor * size;
     }
 
@@ -82,8 +110,7 @@ public class OpenAddressHashMap implements OpenAddressMap {
     public long get(int key) {
         if (usedNodeAmount != 0) {
             return nodes[findIndex(key)].getValue();
-        }
-        else{
+        } else {
             throw new IllegalArgumentException();
         }
     }
@@ -96,12 +123,12 @@ public class OpenAddressHashMap implements OpenAddressMap {
     @Override
     public void resize() {
         Node[] oldNodesArray = nodes;
-        this.size = size*2+1;
+        this.size = size * 2 + 1;
         this.nodeHasher = new NodeHasher(size);
         nodes = new Node[size];
 
-        for (Node node : oldNodesArray){
-            if (node != null){
+        for (Node node : oldNodesArray) {
+            if (node != null) {
                 put(node);
             }
         }
@@ -132,7 +159,7 @@ public class OpenAddressHashMap implements OpenAddressMap {
 
     @Override
     public boolean containsValue(long value) {
-        if (nodes != null & usedNodeAmount !=0){
+        if (nodes != null & usedNodeAmount != 0) {
             for (Node node : nodes) {
                 if (node != null) {
                     return node.getValue() == value;
@@ -142,7 +169,7 @@ public class OpenAddressHashMap implements OpenAddressMap {
         return false;
     }
 
-    public void remove(int key){
+    public void remove(int key) {
         nodes[findIndex(key)].setAvailable(true);
 
 
