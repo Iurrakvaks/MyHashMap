@@ -107,6 +107,10 @@ public class MyHashMap implements OpenAddressMap {
         return this.size;
     }
 
+    public int getUsedNodeAmount() {
+        return usedNodeAmount;
+    }
+
     @Override
     public void clear() {
         usedNodeAmount = 0;
@@ -115,7 +119,7 @@ public class MyHashMap implements OpenAddressMap {
 
     @Override
     public boolean containsKey(int key) {
-        if (nodes != null & usedNodeAmount != 0) {
+        if (usedNodeAmount != 0) {
             int index = findIndex(key);
             return nodes[index] != null;
         }
@@ -124,20 +128,23 @@ public class MyHashMap implements OpenAddressMap {
 
     @Override
     public boolean containsValue(long value) {
-        if (nodes != null & usedNodeAmount != 0) {
+        if (usedNodeAmount != 0) {
             for (Node node : nodes) {
                 if (node != null) {
-                    return node.getValue() == value;
+                    if (node.getValue() == value) {
+                        return true;
+                    }
                 }
             }
         }
         return false;
     }
 
+
     private class Node {
 
-        private int key;
-        private long value;
+        int key;
+        long value;
 
         Node(int key, long value) {
             this.key = key;
@@ -155,5 +162,7 @@ public class MyHashMap implements OpenAddressMap {
         int getKey() {
             return key;
         }
+
+
     }
 }
