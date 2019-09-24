@@ -14,28 +14,6 @@ public class MyHashMap implements OpenAddressMap {
     private NodeIndexer nodeIndexer;
     private Node[] nodes;
 
-    private class Node {
-
-        private int key;
-        private long value;
-
-        Node(int key, long value) {
-            this.key = key;
-            this.value = value;
-        }
-
-        long getValue() {
-            return value;
-        }
-
-        void setValue(long value) {
-            this.value = value;
-        }
-
-        int getKey() {
-            return key;
-        }
-    }
 
     public MyHashMap(int size, int step) {
         this.size = size;
@@ -154,5 +132,28 @@ public class MyHashMap implements OpenAddressMap {
             }
         }
         return false;
+    }
+
+    private class Node {
+
+        private int key;
+        private long value;
+
+        Node(int key, long value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        long getValue() {
+            return value;
+        }
+
+        void setValue(long value) {
+            this.value = value;
+        }
+
+        int getKey() {
+            return key;
+        }
     }
 }
