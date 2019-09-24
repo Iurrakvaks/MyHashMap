@@ -1,4 +1,4 @@
-package com.cp.ambelnok.hashtable.Probe;
+package com.cp.ambelnok.hashtable.probe;
 
 public class LinearProbe implements Probe {
 

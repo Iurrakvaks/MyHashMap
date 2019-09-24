@@ -1,8 +1,6 @@
-package com.cp.ambelnok.hashtable.Probe;
+package com.cp.ambelnok.hashtable.probe;
 
 public interface Probe {
-
-    int step = 1;
 
     int getNext(int collisionIndex);
 
